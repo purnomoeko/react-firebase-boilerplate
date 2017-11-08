@@ -3,73 +3,52 @@ import {
     BrowserRouter as Router,
     Route,
     Link,
+    Redirect,
+    Switch,
 } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'gentelella/build/css/custom.min.css';
+import propTypes from 'prop-types';
+import Login from './Login';
 
-const Home = () => (
-    <div>
-        <h2>Home</h2>
-    </div>
+const Home = () => <h1>Home</h1>;
+const PrivateRoute = ({ component, ...rest }) => (
+    <Route
+        {...rest}
+        render={props => (
+            <Redirect
+                to={{
+                    pathname: '/login',
+                    state: { from: props.location },
+                }}
+            />
+        )}
+    />
 );
 
-const About = () => (
-    <div>
-        <h2>About</h2>
-    </div>
-);
+PrivateRoute.propTypes = {
+    component: propTypes.func.isRequired,
+}
 
-const Topic = ({ match }) => (
-    <div>
-        <h3>{match.params.topicId}</h3>
-    </div>
-);
-
-const Topics = ({ match }) => (
-    <div>
-        <h2>Topics</h2>
-        <ul>
-            <li>
-                <Link to={`${match.url}/rendering`}>
-                    Rendering with React
-                </Link>
-            </li>
-            <li>
-                <Link to={`${match.url}/components`}>
-                    Components
-                </Link>
-            </li>
-            <li>
-                <Link to={`${match.url}/props-v-state`}>
-                    Props v. State
-                </Link>
-            </li>
-        </ul>
-
-        <Route path={`${match.url}/:topicId`} component={Topic} />
-        <Route
-            exact
-            path={match.url}
-            render={() => (
-                <h3>Please select a topic.</h3>
-            )}
-        />
-    </div>
-);
-const BasicExample = () => (
+const AllRoutes = () => (
     <Router>
         <div>
-            <ul>
-                <li><Link to="/">Home</Link></li>
-                <li><Link to="/about">About</Link></li>
-                <li><Link to="/topics">Topics</Link></li>
-            </ul>
-
-            <hr />
-
-            <Route exact path="/" component={Home} />
-            <Route path="/about" component={About} />
-            <Route path="/topics" component={Topics} />
+            <Switch>
+                <PrivateRoute exact path="/" component={Home} />
+                <Route exact path="/login" component={Login} />
+                <Route
+                    render={props => (
+                        <Redirect
+                            to={{
+                                pathname: '/404.html',
+                                state: { from: props.location },
+                            }}
+                        />
+                    )}
+                />
+            </Switch>
         </div>
     </Router>
 );
 
-export default BasicExample;
+export default AllRoutes;
