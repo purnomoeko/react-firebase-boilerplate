@@ -15,7 +15,7 @@ export default function (state = null, action) {
     case FETCH_FIREBASE_USER:
         return action.payload;
     case LOGOUT_FIREBASE_USER:
-        return action.payload;
+        return null;
     case REGISTER_FIREBASE_USER:
         return action.payload;
     case LOGIN_FIREBASE_USER:

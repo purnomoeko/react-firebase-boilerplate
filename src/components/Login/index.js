@@ -1,30 +1,44 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { loginUser, fetchUser, loginWithProvider, getUserInfo } from '../../actions/';
 
 
 class Login extends React.Component {
     constructor() {
         super();
         this.state = {
-            username: '',
+            email: '',
             password: '',
+            error: null,
         };
+        this.submit = this.submit.bind(this);
     }
 
     componentWillMount() {
+        
         document.body.className = 'login';
     }
 
     componentWillUnmount() {
-        document.body.className = '';
+        document.body.className = 'nav-md';
     }
 
-    submit() {
-        const { password, username } = this.state;
+    submit(e) {
+        e.preventDefault();
+        this.setState({ error: null });
+        const { password, email } = this.state;
+        this.props.loginUser({ password, email })
+            .then(res => console.log(res))
+            .catch((error) => {
+                this.setState({ error });
+            });
     }
 
 
     render() {
+        if (this.props.user !== null) return <Redirect to="/" />;
         return (
             <div>
                 <a className="hiddenanchor" id="signup">signup</a>
@@ -33,15 +47,18 @@ class Login extends React.Component {
                 <div className="login_wrapper">
                     <div className="animate form login_form">
                         <section className="login_content">
-                            <form>
+                            <form onSubmit={this.submit}>
                                 <h1>Login Form</h1>
+                                <div className="alert alert-danger" style={{ display: this.state.error === null ? 'none' : 'block' }}>
+                                    {this.state.error ? this.state.error.errorMessage : ''}
+                                </div>
                                 <div>
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Username"
+                                        placeholder="Email"
                                         required=""
-                                        onChange={e => this.setState({ username: e.target.value })}
+                                        onChange={e => this.setState({ email: e.target.value })}
                                     />
                                 </div>
                                 <div>
@@ -54,7 +71,7 @@ class Login extends React.Component {
                                     />
                                 </div>
                                 <div>
-                                    <button className="btn btn-default submit" onClick={this.submit}>Log in</button>
+                                    <button className="btn btn-default submit" type="submit" onClick={this.submit}>Log in</button>
                                     <Link to="/reset-pwd">Lost your password?</Link>
                                 </div>
 
@@ -80,4 +97,17 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+const mapDispatchToProps = dispatch => (
+    bindActionCreators({
+        loginUser,
+        fetchUser,
+        loginWithProvider,
+        getUserInfo,
+    }, dispatch)
+);
+
+const mapStateToProps = state => ({
+    user: state.user,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

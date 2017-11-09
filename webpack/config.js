@@ -5,6 +5,7 @@ const Webpack = require('webpack');
 module.exports = (options) => {
     const config = {
         entry: './src/app.js',
+        devtool: options.isProduction ? '' : 'source-map',
         output: {
             path: `${__dirname}/../dist`,
             filename: options.isProduction ? 'bundle.min.js' : 'bundle.js',
@@ -46,7 +47,7 @@ module.exports = (options) => {
             ],
         },
         plugins: [
-            new HtmlWebpackPlugin({ template: './src/index.html' }),
+            new HtmlWebpackPlugin({ template: './src/index.html', title: options.title || 'App', isProduction: options.isProduction }),
             new HtmlWebpackPlugin({ template: './src/404.html', filename: '404.html' }),
         ],
     };
