@@ -7,8 +7,7 @@ import rootReducers from './reducers';
 
 export default function configureStore(initialState) {
     const middleware = [thunk, reduxPromise];
-    middleware.push(logger);
-    if (process.env.NODE_ENV === 'dev') {
+    if (__DEV__) {
         middleware.push(logger);
     }
     const enhancer = compose(

@@ -17,7 +17,6 @@ class Login extends React.Component {
     }
 
     componentWillMount() {
-        
         document.body.className = 'login';
     }
 
