@@ -32,6 +32,14 @@ $ cd react-firebase-boilerplate
 $ npm install
 $ npm run dev
 ```
+Notes
+------------
+Please install webpack and webpack-dev-server globally. 
+
+
+```
+$ npm install -g webpack webpack-dev-server
+```
 
 Firebase settings
 --------
