@@ -7,8 +7,6 @@ import {
 } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'gentelella/build/css/custom.min.css';
 import propTypes from 'prop-types';
 import Login from './Login';
 import Home from './Home';

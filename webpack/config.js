@@ -12,7 +12,7 @@ module.exports = (options) => {
             publicPath: '/',
         },
         module: {
-            loaders: [
+            rules: [
                 { test: /\.css$/, loader: 'style-loader!css-loader' },
                 {
                     test: /\.js|.jsx$/,
